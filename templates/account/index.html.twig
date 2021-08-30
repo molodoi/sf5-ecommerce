@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mon compte{% endblock %}
+
+{% block body %}
+    <h2 class="mt-3">Bienvenue dans votre espace {{ app.user.firstname }}.</h2> 
+    <br />
+    <p>C'est içi que vous allez pouvoir gérer vos informations personnelles et commandes.</p>
+    <div class="row">    
+        <div class="col-5">
+            <div class="card">
+                <h5 class="card-header">Informations personnelles</h5>
+                <div class="card-body">
+                    <p class="card-text">Vérifiez et modifiez vos données personnelles</p>
+                    <p><a href="{{ path('back_account_update_password') }}">Modifier mon mot de passe</a></p>
+                    <p><a href="{{ path('back_account_update_password') }}">Mes adresses</a></p>
+                </div>
+            </div>
+        </div>
+        <div class="col-5">
+            <div class="card">
+                <h5 class="card-header">Vos commandes</h5>
+                <div class="card-body">
+                    <p class="card-text">Gérez vos commandes</p>
+                    <p><a href="{{ path('back_account_update_password') }}">Mes commandes</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
