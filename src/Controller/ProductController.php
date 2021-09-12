@@ -48,8 +48,6 @@ class ProductController extends AbstractController
     {
         $product = $this->entityMananger->getRepository(Product::class)->findOneBySlug($slug);
 
-        dump($product);
-
         return $this->render('product/show.html.twig', [
             'product' => $product   
         ]);

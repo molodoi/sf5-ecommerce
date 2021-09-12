@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Vos adresses{% endblock %}
+
+{% block body %}
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ path('back_account') }}">Profil</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Vos adresses</li>
+        </ol>
+    </nav>
+    <h2 class="mt-3">Vos adresses</h2> 
+    <br />
+    <p>C'est içi que vous avez la possibilité de gérer vos adresses.</p>
+    <a href="{{ path('back_account_add_address') }}" class="btn btn-primary text-end">Ajouter une adresse</a>
+    <br />
+    <br />
+    <div class="row">    
+        <div class="col-12">
+            {% if app.user.addresses|length != 0 %}
+                {% for address in app.user.addresses %}
+                    <div class="card">
+                        <h5 class="card-header">{{ address.name }}</h5>
+                        <div class="card-body">
+                            <p class="card-text">
+                                <b>{{ address.firstname }} {{ address.lastname }}</b>
+                                <br />
+                                {{ address.address }}
+                                <br />
+                                {{ address.zipcode }} {{ address.city }}
+                                <br />
+                                {{ address.country }}
+                                <br />
+                                {{ address.phone }}
+                                <br />
+                                {{ address.company }}
+                                <br />
+                                <a href="{{ path('back_account_edit_address', { id:address.id }) }}">Modifier l'adresse</a>
+                                 | <a href="{{ path('back_account_remove_address', { id:address.id }) }}" class="text-danger">Supprimer</a>
+                            </p>
+                        </div>
+                    </div>
+
+                    
+                {% endfor %}
+            {% else %}
+                <p>Vous n'avez pas encore ajouté d'adresses. Pour en ajouter une, veuillez cliquer <a href="{{ path('back_account_add_address') }}">içi</a></p>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

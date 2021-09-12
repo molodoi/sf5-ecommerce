@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ajouter une adresse{% endblock %}
+
+{% block body %}
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ path('back_account') }}">Profil</a></li>
+            <li class="breadcrumb-item"><a href="{{ path('back_account_address') }}">Vos adresses</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Ajouter une adresse</li>
+        </ol>
+    </nav>
+    <h2 class="mt-3">Ajouter une adresse</h2> 
+    <br />
+    <p>C'est içi que vous avez la possibilité de gérer vos adresses.</p>
+       
+        {{ form_start(address_form, { 'attr' : { 'class': 'row g-3' } }) }}
+        <div class="col-12">
+            {{ form_errors(address_form) }}
+        </div>
+        <div class="col-12">
+            {{ form_row(address_form.name) }}   
+        </div>
+        <div class="col-md-6">
+            {{ form_row(address_form.firstname) }}
+        </div>
+        <div class="col-md-6">
+            {{ form_row(address_form.lastname) }} 
+        </div>
+        <div class="col-12">
+            {{ form_row(address_form.address) }}   
+        </div>
+        <div class="col-md-3">
+            {{ form_row(address_form.zipcode) }}
+        </div>
+        <div class="col-md-3">
+            {{ form_row(address_form.city) }}
+        </div>
+        <div class="col-md-6">
+            {{ form_row(address_form.country) }}  
+        </div>
+        <div class="col-md-6">
+            {{ form_row(address_form.phone) }}
+        </div>
+        <div class="col-md-6">
+            {{ form_row(address_form.company) }} 
+        </div>
+
+
+        {{ form_end(address_form) }}
+{% endblock %}
