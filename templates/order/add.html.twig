@@ -1,0 +1,76 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Commande{% endblock %}
+
+
+{% block body %}
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ path('homepage') }}">Accueil</a></li>
+            <li class="breadcrumb-item"><a href="{{ path('cart') }}">Panier</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Livraison</li>
+        </ol>
+    </nav>
+    <h2>Récapitulatif</h2>
+    <p>Vérifiez vos informations avant de payer votre commande.</p>
+    <hr />
+    <div class="row">
+        <div class="col-md-6">
+            <h3>Adresse de livraison</h3>
+            {{ delivery.firstname }} {{ delivery.lastname }}<br />
+            Tel : {{ delivery.phone }}<br />
+            {{ delivery.address }}<br />
+            {{ delivery.zipcode }} {{ delivery.city }}<br />
+            {{ delivery.country }}<br />
+            {% if delivery.company %}
+                {{ delivery.company }}
+            {% endif %}
+            <hr />
+            <h3>Transporteur</h3>
+            {{ carrier.name }}<br />
+            {{ carrier.description }}<br />
+            {{ (carrier.price / 100) | number_format(2) }} €
+        </div>
+        <div class="col-md-6">
+            <h3>Commande</h3>
+            <div class="table-responsive">
+                <table class="table">
+                {% set total = null %}
+                {% for product in products %}
+                    <tr>
+                        <td>
+                            <img src="/products/{{ product.product.image }}" class="img-fluid" alt="{{ product.product.name }}" style="height:50px;"/>
+                        </td>
+                        <td class="align-middle">
+                            {{ product.product.name }}<br />
+                            <small>{{ product.product.subtitle }}</small>
+                        </td>
+                        <td class="text-end align-middle">                            
+                            x {{ product.quantity }}                             
+                        </td>
+                        <td class="text-end align-middle">
+                            {{ ((product.product.price * product.quantity) / 100) | number_format(2) }} €
+                        </td>
+                    </tr>
+                    {% set total = total + (product.product.price * product.quantity) %}   
+                {% endfor %}
+                    <tr>
+                        <td colspan="3" class="text-end align-middle">Sous-total</td>
+                        <td class="text-end align-middle">{{ (total / 100) | number_format(2)  }} €</td>
+                    </tr>
+                    <tr>
+                        <td colspan="3" class="text-end align-middle">Livraison</td>
+                        <td class="text-end align-middle">{{ (carrier.price / 100) | number_format(2) }} €</td>
+                    </tr>
+                    <tr>
+                        <td colspan="3" class="text-end align-middle">Total</td>
+                        <td class="text-end align-middle">{{ ((total+carrier.price) / 100) | number_format(2)  }} €</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="float-end">
+                <a href="#" class="btn btn-success">Payer {{ ((total+carrier.price) / 100) | number_format(2)  }} €</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}

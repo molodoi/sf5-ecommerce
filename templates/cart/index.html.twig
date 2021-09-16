@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello CartController!{% endblock %}
+{% block title %}Panier{% endblock %}
 
 {% block body %}
 <div class="row">
@@ -24,25 +24,25 @@
                     {% set total = null %}
                     {% for product in products %}
                         <tr>
-                            <th scope="row">
+                            <td scope="row">
                                 <img src="products/{{ product.product.image }}" class="img-fluid" alt="{{ product.product.name }}" style="height:100px;"/>
-                            </th>
-                            <td>
+                            </td>
+                            <td class="align-middle">
                                 <a href="" class="link-danger fw-bold">{{ product.product.name }}</a><br />
                                 <small>{{ product.product.subtitle }}</small>
                             </td>
-                            <td class="text-end">
+                            <td class="text-end align-middle">
                                 <a href="{{ path('sub_to_cart', {id: product.product.id}) }}" class="link-dark"><i class="bi bi-dash-circle"></i></a>
                                 x {{ product.quantity }} 
                                 <a href="{{ path('add_to_cart', {id: product.product.id}) }}" class="link-dark"><i class="bi bi-plus-circle"></i></a>
                             </td>
-                            <td class="text-end">
+                            <td class="text-end align-middle">
                                 {{ (product.product.price / 100) | number_format(2) }} €
                             </td>
-                            <td  class="text-end">
+                            <td  class="text-end align-middle">
                                 {{ ((product.product.price * product.quantity) / 100) | number_format(2) }} €
                             </td>
-                            <td  class="text-end">
+                            <td  class="text-end align-middle">
                                 <a href="{{ path('remove_to_cart', { 'id': product.product.id }) }}" class="text-danger"><i class="bi bi-trash"></i></a>
                             </td>
                         </tr>
@@ -58,7 +58,7 @@
                     </tr>
                     <tr>
                         <td colspan="6" class="text-end">
-                            <a href="" class="btn btn-success d-block d-md-inline">Valider mon panier</a>                          
+                            <a href="{{ path('order') }}" class="btn btn-success d-block d-md-inline">Valider mon panier</a>                          
                         </td>
                     </tr>
                 </tbody>
