@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use DateTime;
 use App\Entity\Order;
 use App\Services\Cart;
 use App\Form\OrderType;
@@ -56,18 +55,24 @@ class OrderController extends AbstractController
         if($form_order->isSubmitted() && $form_order->isValid()){
             $date = new \DateTime();
             $carriers = $form_order->get('carriers')->getData();
+
             $delivery = $form_order->get('addresses')->getData();
             $delivery_content = $delivery->getFirstname().' '.$delivery->getLastname();
             $delivery_content .= '<br />'.$delivery->getPhone();
+
             if($delivery->getCompany()){
                 $delivery_content .= '<br />'.$delivery->getCompany();
             }
+
             $delivery_content .= '<br />'.$delivery->getAddress();
             $delivery_content .= '<br />'.$delivery->getZipcode().' '.$delivery->getCity();
             $delivery_content .= '<br />'.$delivery->getCountry();
             
             // Enregistrer la commande
             $order = new Order();
+            // On crée une référence de commande
+            $reference = $date->format('dmYhis').'-'.uniqid();
+            $order->setReference($reference);
             $order->setUser($this->getUser());
             $order->setCreatedAt($date);
             $order->setCarrierName($carriers->getName());
@@ -77,6 +82,8 @@ class OrderController extends AbstractController
 
             $this->entityManager->persist($order);
 
+            $products_for_stripe = [];
+            $my_domain = 'http://sf5-ecommerce.test';
             // Enregistrer les produits            
             foreach($cart->getCartProducts() as $product){
                 $order_details = new OrderDetails();
@@ -94,10 +101,58 @@ class OrderController extends AbstractController
             return $this->render('order/add.html.twig', [
                 'products' => $cart->getCartProducts(),
                 'carrier' => $carriers,
-                'delivery' => $delivery
+                'delivery' => $delivery,
+                'reference' => $order->getReference()
             ]);
         }
 
         return $this->redirectToRoute('cart');
     }
+
+    /**
+     * @Route("/order/thanks/{stripe_session_id}", name="order_success")
+     */
+    public function success(Cart $cart, $stripe_session_id)
+    {
+        $order = $this->entityManager->getRepository(Order::class)->findOneByStripeSessionId($stripe_session_id);
+
+        if (!$order || $order->getUser() != $this->getUser()) {
+            return $this->redirectToRoute('homepage');
+        }
+
+        if ($order->getIsPaid() == 0) {
+            // Vider la session "cart"
+            $cart->clear();
+
+            // Modifier le statut isPaid de notre commande en mettant 1
+            $order->setIsPaid(1);
+            $this->entityManager->flush();
+
+            // Envoyer un email à notre client pour lui confirmer sa commande
+        }
+
+        return $this->render('order/success.html.twig', [
+            'order' => $order
+        ]);
+    }
+
+    /**
+     * @Route("/order/error/{stripe_session_id}", name="order_cancel")
+     */
+    public function error($stripe_session_id)
+    {
+        $order = $this->entityManager->getRepository(Order::class)->findOneByStripeSessionId($stripe_session_id);
+
+        if (!$order || $order->getUser() != $this->getUser()) {
+            return $this->redirectToRoute('home');
+        }
+
+        // Envoyer un email à notre utilisateur pour lui indiquer l'échec de paiement
+
+        return $this->render('order/cancel.html.twig', [
+            'order' => $order
+        ]);
+    }
+
+
 }
