@@ -1,0 +1,8 @@
+<div class="col-md-4 text-center">
+    <img src="/products/{{ product.image }}" class="img-fluid" alt="{{ product.name }}" />
+    <h2><a href="{{ path('product-show', {slug: product.slug}) }}" class="link-danger">{{ product.name }}</a></h2>
+    <h3 class="h4">{{ product.subtitle }}</h3>
+    <span class="h2">{{ (product.price / 100) | number_format(2) }} €</span>
+    <br />
+    <a href="{{ path('add_to_cart', {id: product.id}) }}" class="btn btn-success">Ajouter au panier</a>
+</div>

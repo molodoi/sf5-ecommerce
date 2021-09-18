@@ -12,11 +12,11 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class CartController extends AbstractController
 {
 
-    private $entityMananger;
+    private $entityManager;
 
-    public function __construct(EntityManagerInterface $entityMananger)
+    public function __construct(EntityManagerInterface $entityManager)
     {
-        $this->entityMananger = $entityMananger;
+        $this->entityManager = $entityManager;
     }
 
 

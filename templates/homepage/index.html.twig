@@ -3,5 +3,12 @@
 {% block title %}Accueil{% endblock %}
 
 {% block body %}
-<h1>Hello</h1>
+    <h3>Nos meilleures ventes</h3>
+    <p>Découvrez les articles les plus vendus.</p>
+    <div class="row">
+        {% for product in products %}
+            {% include 'product/single_product.html.twig' %}
+        {% endfor %}
+    </div>
+
 {% endblock %}

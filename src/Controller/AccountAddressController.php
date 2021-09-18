@@ -14,11 +14,11 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class AccountAddressController extends AbstractController
 {
 
-    private $entityMananger;
+    private $entityManager;
 
-    public function __construct(EntityManagerInterface $entityMananger)
+    public function __construct(EntityManagerInterface $entityManager)
     {
-        $this->entityMananger = $entityMananger;
+        $this->entityManager = $entityManager;
     }
 
     /**
@@ -40,8 +40,8 @@ class AccountAddressController extends AbstractController
         $addressForm->handleRequest($request);
         if($addressForm->isSubmitted() && $addressForm->isValid()){
             $address->setUser($this->getUser());
-            $this->entityMananger->persist($address);
-            $this->entityMananger->flush();
+            $this->entityManager->persist($address);
+            $this->entityManager->flush();
             if($cart->get()){
                 return $this->redirectToRoute('order'); 
             }
@@ -58,7 +58,7 @@ class AccountAddressController extends AbstractController
      */
     public function edit(Request $request, $id): Response
     {
-        $address = $this->entityMananger->getRepository(Address::class)->findOneById($id);
+        $address = $this->entityManager->getRepository(Address::class)->findOneById($id);
 
         if(!$address || $address->getUser() != $this->getUser()){
             return $this->redirectToRoute('back_account_address'); 
@@ -68,7 +68,7 @@ class AccountAddressController extends AbstractController
 
         $addressForm->handleRequest($request);
         if($addressForm->isSubmitted() && $addressForm->isValid()){
-            $this->entityMananger->flush();
+            $this->entityManager->flush();
             return $this->redirectToRoute('back_account_address'); 
         }
 
@@ -82,11 +82,11 @@ class AccountAddressController extends AbstractController
      */
     public function remove($id): Response
     {
-        $address = $this->entityMananger->getRepository(Address::class)->findOneById($id);
+        $address = $this->entityManager->getRepository(Address::class)->findOneById($id);
 
         if($address || $address->getUser() == $this->getUser()){
-            $this->entityMananger->remove($address);
-            $this->entityMananger->flush();
+            $this->entityManager->remove($address);
+            $this->entityManager->flush();
         }
 
         return $this->redirectToRoute('back_account_address'); 

@@ -13,11 +13,11 @@ use Symfony\Component\HttpFoundation\Request;
 
 class ProductController extends AbstractController
 {
-    private $entityMananger;
+    private $entityManager;
 
-    public function __construct(EntityManagerInterface $entityMananger)
+    public function __construct(EntityManagerInterface $entityManager)
     {
-        $this->entityMananger = $entityMananger;
+        $this->entityManager = $entityManager;
     }
 
     /**
@@ -25,14 +25,14 @@ class ProductController extends AbstractController
      */
     public function index(Request $request): Response
     {
-        $products = $this->entityMananger->getRepository(Product::class)->findAll();
+        $products = $this->entityManager->getRepository(Product::class)->findAll();
 
         $search = new Search();
         $searchForm = $this->createForm(SearchType::class, $search);
 
         $searchForm->handleRequest($request);
         if($searchForm->isSubmitted() && $searchForm->isValid()){
-            $products = $this->entityMananger->getRepository(Product::class)->findWithSearch($search);
+            $products = $this->entityManager->getRepository(Product::class)->findWithSearch($search);
         }
 
         return $this->render('product/index.html.twig', [
@@ -46,10 +46,13 @@ class ProductController extends AbstractController
      */
     public function show($slug): Response
     {
-        $product = $this->entityMananger->getRepository(Product::class)->findOneBySlug($slug);
+        $product = $this->entityManager->getRepository(Product::class)->findOneBySlug($slug);
+
+        $products = $this->entityManager->getRepository(Product::class)->findByIsBest(1);
 
         return $this->render('product/show.html.twig', [
-            'product' => $product   
+            'product' => $product,  
+            'products' => $products,  
         ]);
     }
 }
