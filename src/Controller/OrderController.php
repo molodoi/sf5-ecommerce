@@ -6,6 +6,7 @@ use App\Entity\Order;
 use App\Services\Cart;
 use App\Form\OrderType;
 use App\Entity\OrderDetails;
+use App\Services\Mailjet;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -112,7 +113,7 @@ class OrderController extends AbstractController
     /**
      * @Route("/order/thanks/{stripe_session_id}", name="order_success")
      */
-    public function success(Cart $cart, $stripe_session_id)
+    public function success(Cart $cart, Mailjet $mail, $stripe_session_id)
     {
         $order = $this->entityManager->getRepository(Order::class)->findOneByStripeSessionId($stripe_session_id);
 
@@ -129,6 +130,9 @@ class OrderController extends AbstractController
             $this->entityManager->flush();
 
             // Envoyer un email à notre client pour lui confirmer sa commande
+            $content = "Bonjour ".$order->getUser()->getFirstname()."<br/>Merci pour votre commande.<br><br/>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aperiam expedita fugiat ipsa magnam mollitia optio voluptas! Alias, aliquid dicta ducimus exercitationem facilis, incidunt magni, minus natus nihil odio quos sunt?";
+            $mail->send($order->getUser()->getEmail(), $order->getUser()->getFirstname(), 'Votre commande est bien validée.', 'Merci', $content);
+
         }
 
         return $this->render('order/success.html.twig', [
@@ -139,7 +143,7 @@ class OrderController extends AbstractController
     /**
      * @Route("/order/error/{stripe_session_id}", name="order_cancel")
      */
-    public function error($stripe_session_id)
+    public function error(Mailjet $mail, $stripe_session_id)
     {
         $order = $this->entityManager->getRepository(Order::class)->findOneByStripeSessionId($stripe_session_id);
 
@@ -148,6 +152,9 @@ class OrderController extends AbstractController
         }
 
         // Envoyer un email à notre utilisateur pour lui indiquer l'échec de paiement
+        $content = "Bonjour ".$order->getUser()->getFirstname()."<br/>Oups! votre commande n'a pas été validé.<br><br/>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aperiam expedita fugiat ipsa magnam mollitia optio voluptas! Alias, aliquid dicta ducimus exercitationem facilis, incidunt magni, minus natus nihil odio quos sunt?";
+        $mail->send($order->getUser()->getEmail(), $order->getUser()->getFirstname(), 'Oups! votre commande n\'a pas été validé.', 'Oups!', $content);
+
 
         return $this->render('order/cancel.html.twig', [
             'order' => $order

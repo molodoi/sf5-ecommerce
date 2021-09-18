@@ -5,6 +5,8 @@
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     app.stripe_api_key: '%env(STRIPE_API_KEY)%'
+    app.mailjet_api_key: '%env(MAIL_JET_API_KEY)%'
+    app.mailjet_api_key_secret: '%env(MAIL_JET_API_KEY_SECRET)%'
 
 services:
     # default configuration for services in *this* file
