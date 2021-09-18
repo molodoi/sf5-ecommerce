@@ -32,7 +32,7 @@ class AccountOrderController extends AbstractController
     }
 
     /**
-     * @Route("/compte/mes-commandes/{reference}", name="back_account_order_show")
+     * @Route("/account/order/{reference}", name="back_account_order_show")
      */
     public function show($reference)
     {

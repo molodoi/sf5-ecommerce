@@ -72,14 +72,14 @@ class OrderController extends AbstractController
             // Enregistrer la commande
             $order = new Order();
             // On crée une référence de commande
-            $reference = $date->format('dmYhis').'-'.uniqid();
+            $reference = $date->format('dmY-his').'-'.random_int(24, 998);
             $order->setReference($reference);
             $order->setUser($this->getUser());
             $order->setCreatedAt($date);
             $order->setCarrierName($carriers->getName());
             $order->setCarrierPrice($carriers->getPrice());
             $order->setDelivery($delivery_content);
-            $order->setIsPaid(0);
+            $order->setState(0);
 
             $this->entityManager->persist($order);
 
@@ -121,12 +121,12 @@ class OrderController extends AbstractController
             return $this->redirectToRoute('homepage');
         }
 
-        if ($order->getIsPaid() == 0) {
+        if ($order->getState() == 0) {
             // Vider la session "cart"
             $cart->clear();
 
-            // Modifier le statut isPaid de notre commande en mettant 1
-            $order->setIsPaid(1);
+            // Modifier le statut de notre commande en mettant 1 Payé
+            $order->setState(1);
             $this->entityManager->flush();
 
             // Envoyer un email à notre client pour lui confirmer sa commande
