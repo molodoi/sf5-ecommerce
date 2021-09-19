@@ -10,7 +10,8 @@
                 <div class="card-body p-md-5">
                     <div class="row justify-content-center">
                         <div class="col-md-10 col-lg-6 col-xl-5">
-                            <p class="text-center h2 fw-bold mb-5 mx-1 mx-md-4 mt-4">Vous avez déjà un compte</p>
+                            <p class="text-center h2 fw-bold mb-5 mx-1 mx-md-4 mt-4">Me connecter</p>
+                            <p class="text-center mb-2 mx-1">Loreum ipsum</p>
                             <form method="post">
                                 {% if error %}
                                     <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
@@ -21,14 +22,13 @@
                                         You are logged in as {{ app.user.username }}, <a href="{{ path('app_logout') }}">Logout</a>
                                     </div>
                                 {% endif %}
-
                                 
-                                <div class="d-flex flex-row align-items-center mb-4">
+                                <div class="d-flex flex-row align-items-center mb-1">
                                     <div class="form-outline flex-fill mb-0"> 
                                         <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control mb-2" placeholder="votre-email@gmail.com" required autofocus>
                                     </div>
                                 </div>
-                                <div class="d-flex flex-row align-items-center mb-4">
+                                <div class="d-flex flex-row align-items-center mb-2">
                                     <div class="form-outline flex-fill mb-0"> 
                                         <input type="password" name="password" id="inputPassword" class="form-control" placeholder="Votre mot de passe" required>
                                     </div>  
@@ -46,9 +46,12 @@
                                     </div>
                                 #}
                                 <div>
-                                    <button class="w-100 btn btn-lg btn-primary mt-4" type="submit">
+                                    <button class="w-100 btn btn-lg btn-primary mt-2" type="submit">
                                         Se connecter
                                     </button>
+                                </div>
+                                <div class="mt-4">
+                                    <p class="text-start">Oups! J'ai <a href="{{ path('reset_password') }}">oublié mon mot de passe..</a></p>
                                 </div>
                             </form>
                         </div>
