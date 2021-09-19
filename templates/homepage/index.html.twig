@@ -2,6 +2,38 @@
 
 {% block title %}Accueil{% endblock %}
 
+{% block caroussel %}
+    <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-indicators">
+            {% for key,header in headers %}
+                <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="{{ key }}" class="{% if key == 0 %}active{% endif %}" aria-current="true" aria-label="Slide 1"></button>
+            {% endfor %}            
+        </div>
+        <div class="carousel-inner">
+            {% for key,header in headers %}
+                <div class="carousel-item {% if key == 0 %}active{% endif %}" style="height:800px;background:url('/slides/{{ header.image }}') no-repeat center center fixed;-webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;">
+                    <div class="carousel-caption d-none d-md-block">
+                        <h5>{{ header.title }}</h5>
+                        <p>{{ header.content }}</p>
+                        <a href="{{ header.btnUrl }}" class="btn btn-outline-light">{{ header.btnTitle }}</a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+{% endblock %}
+
 {% block body %}
     <h3>Nos meilleures ventes</h3>
     <p>Découvrez les articles les plus vendus.</p>
@@ -10,5 +42,4 @@
             {% include 'product/single_product.html.twig' %}
         {% endfor %}
     </div>
-
 {% endblock %}
